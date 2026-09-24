@@ -1,8 +1,8 @@
 {
-  "base": "AUDUSD",
-  "broker_symbol": "AUDUSD",
-  "digits": 5,
-  "point": 1e-05,
+  "base": "USDJPY",
+  "broker_symbol": "USDJPY",
+  "digits": 3,
+  "point": 0.001,
   "server_utc_offset_hours_estimate": 3,
-  "exported_at_utc": "2026-09-24T17:14:23.522421+00:00"
+  "exported_at_utc": "2026-09-24T16:59:19.363876+00:00"
 }
