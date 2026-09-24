@@ -68,11 +68,32 @@ once, at the end (`--include-holdout`).
 is already in the fills), the break-even win rate is 54.5%. Every kind of
 read has to clear that on unseen data before it trades.
 
+## Findings so far (GBPUSD, 30 days, 28 May – 8 Jul 2026, research window only)
+
+Scripts are in `research/`. Run them with the tick folder as the argument.
+
+1. **The hand-set story rules have no edge.** `tools/research_story.py`: story
+   verdicts won 38.5% of the time against a break-even of 54.5%, the same as
+   blindly following every new leg (39.2%).
+2. **The story numbers don't predict direction when a leg completes.** `research/info_test.py`:
+   a gradient-boosting model trained on the older data scored AUC 0.45–0.49 on
+   later days at every leg size tried (2, 3 and 5 pips). 0.50 is a coin flip.
+3. **The engine does carry a weak signal, and it points the way the "wasted effort"
+   idea predicts.** `research/engine_ic.py`: effort beyond what price movement
+   accounts for (5m candle frame, 2–10 minute window) predicts the move over the
+   next 15 minutes *in the opposite direction*. Rank-IC is about −0.05 (t ≈ −3 across
+   days). Net effort is 73–90% correlated with plain price momentum, but this
+   leftover part adds information momentum doesn't have.
+4. **That signal is far too small to pay costs at 5–10 pips.** `research/absorption_trade.py`:
+   fading it lost 0.5–2 pips per trade in every setting tried, on both halves of
+   the data. Roughly 1.1 pips of cost per round trip (0.1 spread plus 1.0
+   commission) against a signal this weak can't be overcome on minute-scale targets.
+
 ## Status
 
 - [x] Engine v2 (checked against the original), leg tracker, story reader, honest outcome labelling
 - [x] Tick exporter, research script, random-walk sanity check (no false edge)
-- [ ] Run on real ticks: which reads actually predict the move
+- [x] First real-tick run: no tradeable edge at the 5–10 pip / minutes scale (see Findings)
 - [ ] Visual story viewer (a session chart with legs and narrative, to compare with your own reading)
 - [ ] Decision rules from evidence, then a tick-level backtest
 - [ ] Live MT5 shell around the same pipeline, then a demo forward test
