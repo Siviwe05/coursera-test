@@ -1,8 +1,8 @@
 {
-  "base": "EURGBP",
-  "broker_symbol": "EURGBP",
+  "base": "EURUSD",
+  "broker_symbol": "EURUSD",
   "digits": 5,
   "point": 1e-05,
-  "server_utc_offset_hours_estimate": null,
-  "exported_at_utc": "2026-09-24T17:11:30.562675+00:00"
+  "server_utc_offset_hours_estimate": 3,
+  "exported_at_utc": "2026-09-24T16:58:43.829268+00:00"
 }
