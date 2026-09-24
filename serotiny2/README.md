@@ -93,8 +93,19 @@ tick folder as the argument.
    effort into the level did better (A +1.9 vs −2.0; B +0.7 vs +0.3 pips). That comes from about 30
    events per group, so it is a lead worth testing on more pairs, not an edge (`key_levels.py`).
 
-**Bottom line so far:** no strategy built on the tick engine has shown a tradeable edge after costs
-on this data. The engine is a faithful, deterministic reading of the price path. It has not yet shown
+6. **The situation solver** (`solver/`, all 5 pairs; 34,461 situations; walk-forward over 43 days).
+   For each 5-minute moment during London and New York hours it found the 100 most similar past
+   situations, using price story, key levels, engine effort and cross-pair currency strength. It then
+   took the best of 8 buy/sell stop-and-target plans, or passed.
+   Result: about 1,000 trades, **−0.21R per trade in half A and −0.23R in half B** (t ≈ −4), with a
+   36% win rate. Before costs it is about zero; the loss is the spread plus commission. The solver's
+   confidence meant nothing: trades it expected to earn +0.1R and trades it expected to earn +0.8R
+   realised the same −0.2R. Removing the engine or the cross-pair data changed little. Shuffled-memory
+   controls, where situations carry no information, did no better and no worse in any meaningful way.
+   No pair was positive (USDJPY was the least negative at −0.02R).
+
+**Bottom line so far:** no approach tried, fixed rules or the situation solver, with or without the engine or
+cross-pair data, has shown a tradeable edge after costs on 5 pairs over 3 months. The engine is a faithful, deterministic reading of the price path. It has not yet shown
 information that the price path itself doesn't already carry.
 
 ## Status
