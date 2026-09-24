@@ -68,32 +68,40 @@ once, at the end (`--include-holdout`).
 is already in the fills), the break-even win rate is 54.5%. Every kind of
 read has to clear that on unseen data before it trades.
 
-## Findings so far (GBPUSD, 30 days, 28 May – 8 Jul 2026, research window only)
+## Findings (GBPUSD, 86 trading days, 28 May – 24 Sep 2026)
 
-Scripts are in `research/`. Run them with the tick folder as the argument.
+Research window: 28 May – 25 Aug. **Holdout: 25 Aug – 24 Sep, still unopened** (nothing has earned
+a test on it). Every result is reported separately for the two halves of the research window (A, B);
+a real effect has to show up in both. Scripts are in `research/`; run them from that folder with the
+tick folder as the argument.
 
-1. **The hand-set story rules have no edge.** `tools/research_story.py`: story
-   verdicts won 38.5% of the time against a break-even of 54.5%, the same as
-   blindly following every new leg (39.2%).
-2. **The story numbers don't predict direction when a leg completes.** `research/info_test.py`:
-   a gradient-boosting model trained on the older data scored AUC 0.45–0.49 on
-   later days at every leg size tried (2, 3 and 5 pips). 0.50 is a coin flip.
-3. **The engine does carry a weak signal, and it points the way the "wasted effort"
-   idea predicts.** `research/engine_ic.py`: effort beyond what price movement
-   accounts for (5m candle frame, 2–10 minute window) predicts the move over the
-   next 15 minutes *in the opposite direction*. Rank-IC is about −0.05 (t ≈ −3 across
-   days). Net effort is 73–90% correlated with plain price momentum, but this
-   leftover part adds information momentum doesn't have.
-4. **That signal is far too small to pay costs at 5–10 pips.** `research/absorption_trade.py`:
-   fading it lost 0.5–2 pips per trade in every setting tried, on both halves of
-   the data. Roughly 1.1 pips of cost per round trip (0.1 spread plus 1.0
-   commission) against a signal this weak can't be overcome on minute-scale targets.
+1. **Story rules (5–10 pips):** no edge. The verdicts won 38.5% of the time against a 54.5%
+   break-even, no better than following every leg (`tools/research_story.py`, first 30 days).
+2. **Story numbers when a leg completes:** no directional information. A model trained on older
+   data scored AUC 0.45–0.49 on later days at leg sizes of 2, 3 and 5 pips (`info_test.py`).
+3. **The engine's effort re-measures price movement.** It is 73–90% correlated with the price move,
+   and the leftover part ("effort beyond price") predicts nothing: its sign flips between A and B at
+   every scale from 10 to 60 minutes (`scale_ic.py`). The weak signal reported on the first 30 days
+   did not replicate.
+4. **Fading large moves:** there is a rank correlation, but it isn't tradeable. Measured in pips,
+   the largest moves continue slightly rather than revert. Every fade variant with costs loses in at
+   least one half (`fade_trade.py`).
+5. **Key levels** (previous day high/low, Asian range): out of 127 first touches, levels broke
+   slightly more often than they held (about 58%). Betting on the rejection loses about 3 pips per
+   trade. Following the breakout comes out roughly even after costs (−0.03 / +0.48 pips per trade,
+   10/10 target/stop). One engine reading pointed the same way in both halves: breakouts with strong
+   effort into the level did better (A +1.9 vs −2.0; B +0.7 vs +0.3 pips). That comes from about 30
+   events per group, so it is a lead worth testing on more pairs, not an edge (`key_levels.py`).
+
+**Bottom line so far:** no strategy built on the tick engine has shown a tradeable edge after costs
+on this data. The engine is a faithful, deterministic reading of the price path. It has not yet shown
+information that the price path itself doesn't already carry.
 
 ## Status
 
 - [x] Engine v2 (checked against the original), leg tracker, story reader, honest outcome labelling
 - [x] Tick exporter, research script, random-walk sanity check (no false edge)
-- [x] First real-tick run: no tradeable edge at the 5–10 pip / minutes scale (see Findings)
+- [x] Real-tick research on 86 days of GBPUSD: no tradeable edge yet (see Findings)
 - [ ] Visual story viewer (a session chart with legs and narrative, to compare with your own reading)
 - [ ] Decision rules from evidence, then a tick-level backtest
 - [ ] Live MT5 shell around the same pipeline, then a demo forward test

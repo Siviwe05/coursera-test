@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 ticks/
 story_reads*.csv
+*.csv
+!serotiny2/**/fixtures/*.csv
