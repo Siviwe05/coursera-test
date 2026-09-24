@@ -104,6 +104,16 @@ tick folder as the argument.
    controls, where situations carry no information, did no better and no worse in any meaningful way.
    No pair was positive (USDJPY was the least negative at −0.02R).
 
+7. **Effort vs result at critical zones, pre-registered** (`research/PREREG_effort_vs_result.md`,
+   `research/effort_vs_result.py`, all 5 pairs, 388 zone events). This follows the diary's process:
+   watch the first 15 minutes at a previous-session zone; trade only with a clear winner, the winner
+   earning more result per unit of effort, and the loser making no progress recently. Effort was
+   measured separately from price, as quote activity relative to the normal for that time of day
+   (only 0.33–0.52 correlated with price movement once time of day is accounted for).
+   **It does not pass:** 34 checklist trades at −0.04R (half A) and −0.51R (half B). It did no better
+   than the price-derived effort version, and no better than a shuffled-activity control. Rejections
+   were worse (−0.54R) than breakouts (−0.03R). Holdout stays sealed.
+
 **Bottom line so far:** no approach tried, fixed rules or the situation solver, with or without the engine or
 cross-pair data, has shown a tradeable edge after costs on 5 pairs over 3 months. The engine is a faithful, deterministic reading of the price path. It has not yet shown
 information that the price path itself doesn't already carry.
